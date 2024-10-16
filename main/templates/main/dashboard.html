@@ -1,21 +1,33 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="container">
-    <div class="row">
-        <div class="col-md-4"></div>
-        <div class="col-md-4">
-            <div class="card shadow">
-                <div class="card-body">
-                    <input type="text" class="form-control" id="user-prompt">
+    <div class="row ">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+            <div class="card shadow mt-5">
+               
+                <div class="card-body" style="height: 400px; overflow-y: scroll;">
+                    <div id="messages-container" class="messages-container">
+
+                    </div>
                 </div>
                 <div class="card-body">
-                    <p id="sentence"></p>
+                      <div class="input-group mb-3">
+                          <textarea rows="1" onkeydown="auto_grow(this)" id="user-prompt"  class="form-control shadow-none border" placeholder="Ask Legal advisor...." onclick=""></textarea>
+                          <button class="btn btn-outline-dark" type="button" id="button-addon1" onclick="sendPrompt()">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-send" viewBox="0 0 16 16">
+                                <path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576zm6.787-8.201L1.591 6.602l4.339 2.76z"/>
+                            </svg>
+                          </button>
+                      </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-4"></div>
+        <div class="col-md-3"></div>
     </div>
 </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/2.1.0/showdown.min.js" integrity="sha512-LhccdVNGe2QMEfI3x4DVV3ckMRe36TfydKss6mJpdHjNFiV07dFpS2xzeZedptKZrwxfICJpez09iNioiSZ3hA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 
 <script>
@@ -39,18 +51,168 @@
             sendPrompt();
         }
     })
+
     function sendPrompt(){
         const message = promptInput.value;
+        addHumanMessage(message);
         chatSocket.send(JSON.stringify({message}));
         promptInput.value = "";
+
+    }
+    const messages_container = document.getElementById("messages-container");
+
+    chatSocket.onclose = (e) =>{
+        alert("Please refresh as websocket closed unexpectedly!")
     }
 
-
+    chatSocket.onerror = (e) =>{
+        alert("Got error: "+e.data)
+    }
 
     chatSocket.onmessage = (e) =>{
+        // here we are going to parse ai message and the chunks
         const data = JSON.parse(e.data);
-        console.log(data)
+        let isStop = data.is_stop;
+        let checkpoint_id = data.checkpoint;
+        let message = data.message;
+        // console.log(message, isStop, checkpoint_id)
+        if(isStop){
+            promptInput.readonly = false; 
+        }else{
+            promptInput.readonly = true;
+        }
+        var converter = new showdown.Converter();
+        var html = converter.makeHtml(message);
+        addAIMessage(html, checkpoint_id);
     }
+
+    function addHumanMessage(message){
+
+        const newMessageContainer = document.createElement("div");
+        newMessageContainer.classList.add("message-container");
+        
+        const newMessage = document.createElement("div");
+        newMessage.classList.add("message-box");
+        newMessage.classList.add("right-chat");
+        newMessage.innerHTML = message;
+
+        newMessageContainer.appendChild(newMessage);
+
+        messages_container.appendChild(newMessageContainer);
+        scrollToBottom();
+    }
+
+    function addAIMessage(message, checkpoint){
+        const newMessageContainer = document.createElement("div");
+        newMessageContainer.classList.add("message-container");
+
+        // if same id message exist
+        const oldMessage = document.getElementById(checkpoint);
+        if(oldMessage){
+            oldMessage.innerHTML+=message;
+        }
+        // if not
+        else{
+            const newMessage = document.createElement("div");
+            newMessage.classList.add("message-box");
+            newMessage.id = checkpoint;
+            newMessage.classList.add("left-chat");
+            newMessage.innerHTML = message;
+
+            newMessageContainer.appendChild(newMessage);
+            messages_container.appendChild(newMessageContainer);
+        }
+        scrollToBottom();
+    }
+
+
+    function scrollToBottom(){
+        messages_container.scrollIntoView({ behavior: 'smooth', block: 'end' });
+    }
+
+    function auto_grow(element) {
+        element.style.height = "10px";
+        element.style.height = (element.scrollHeight) + "px";
+    }
+
+
+
 </script>
+
+<style>
+  
+    ::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cfcbcb;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #fff;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+
+        
+
+        .message-box {
+            display: flex;
+            color: black;
+        }
+
+        .message-box a {
+            color: #075E54;
+            text-decoration: none;
+        }
+
+        .message-box a:hover {
+            color: #fff;
+        }
+
+        .messages-container {
+            /* display: block; */
+            height: 400px;
+            display: flex;
+            flex-direction: column;
+        }
+
+       
+
+
+        .message-box {
+            margin: 5px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 0.4px gray;
+            display: inline-block;
+            max-width: 400px;
+            padding: 10px;
+        }
+
+      
+
+        .left-chat {
+            background-color: #e7e7e7;
+        }
+
+        .right-chat {
+            background-color: #40c9ff;
+            float: right;
+            color: white;
+        }
+
+    
+        textarea {
+            resize: none;
+            overflow: hidden;
+            min-height: 10px;
+            max-height: 100px;
+        }
+
+</style>
 
 {% endblock content %}
