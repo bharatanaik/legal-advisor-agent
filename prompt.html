@@ -5,22 +5,23 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 </head>
 
 <body>
     <div class="container">
         <div class="message-container">
-            <div id="chat_{{ message.id }}" class="message-box right-chat"> Hi 
+            <div id="chat_{{ message.id }}" class="message-box right-chat"> Hi
                 <span class="time"> {{ message.date_time | time }}</span>
             </div>
         </div>
         <div class="message-container">
-            <div id="chat_{{ message.id }}" class="message-box left-chat"> Hello I am your personal asisiatnt
+            <div id="chat_{{ message.id }}" class="message-box left-chat"> Hello I am your personal assistant
                 <span class="time"> {{ message.date_time | time }}</span>
             </div>
         </div>
         <div class="message-container">
-            <div id="chat_{{ message.id }}" class="message-box right-chat"> How to tie a shoe 
+            <div id="chat_{{ message.id }}" class="message-box right-chat"> How to tie a shoe
                 <span class="time"> {{ message.date_time | time }}</span>
             </div>
         </div>
@@ -29,15 +30,26 @@
                 <span class="time"> {{ message.date_time | time }}</span>
             </div>
         </div>
+
+        <div class="input-group mb-3">
+            <textarea rows="1"  class="form-control border-0 shadow-none" placeholder="Type a message..." aria-label="Message" aria-describedby="button-addon2" oninput="auto_grow(this)"></textarea>
+                <button class="btn bg-light">
+                    <!-- <button class="btn btn-outline-secondary" type="button" id="button-addon2">Send</button> -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-send" viewBox="0 0 16 16">
+                        <path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576zm6.787-8.201L1.591 6.602l4.339 2.76z"/>
+                    </svg>
+                </button>
+          
+
+        </div>
+
     </div>
 
-
     <style>
-        .stick-to-top{
-            position:sticky;
+        .stick-to-top {
+            position: sticky;
             top: 5px;
         }
-       
 
         .message-box {
             display: flex;
@@ -45,13 +57,12 @@
         }
 
         .message-box a {
-            color:#075E54;
+            color: #075E54;
             text-decoration: none;
         }
 
         .message-box a:hover {
-            color:#fff;
-            
+            color: #fff;
         }
 
         .message-box .time {
@@ -59,14 +70,9 @@
             align-self: flex-start;
         }
 
-       
-
         .message-container {
             display: block;
-
         }
-
-    
 
         .date-container {
             background-color: #ECE5DD;
@@ -74,7 +80,7 @@
             margin: auto;
             margin-top: 20px;
             margin-bottom: 20px;
-            padding: 5px 10px 5px 10px;
+            padding: 5px 10px;
             border-radius: 40px;
             color: rgb(93, 90, 90);
             font-weight: bold;
@@ -94,7 +100,6 @@
         }
 
         .container {
-            /* width: 700px; */
             overflow-y: scroll;
             height: 500px;
             display: flex;
@@ -128,10 +133,10 @@
             padding: 10px;
         }
 
-
-        .message-box .sticker{
+        .message-box .sticker {
             width: 200px;
         }
+
         .left-chat {
             background-color: white;
         }
@@ -156,8 +161,29 @@
                 max-width: 250px;
             }
         }
+
+        .input-group {
+            margin-top: auto;
+            padding: 10px;
+            
+        }
+
+        textarea {
+            resize: none;
+            overflow: hidden;
+            min-height: 10px;
+            max-height: 100px;
+        }
+
     </style>
 
+    <script>
+        //const textarea= document.getElementById()
+        function auto_grow(element) {
+            element.style.height = "5px";
+            element.style.height = (element.scrollHeight) + "px";
+}
+    </script>
 
 </body>
 
