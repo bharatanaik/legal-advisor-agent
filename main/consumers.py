@@ -4,14 +4,15 @@ from channels.generic.websocket import WebsocketConsumer
 from core.settings import app
 from main.agent import query
 
+from main.utils import LEGAL_ADVISOR_PROMPT
+
 class ChatConsumer(WebsocketConsumer):
     def connect(self):
         self.room_name = self.scope["url_route"]["kwargs"]["room_name"]
         self.accept()
-        self.send(text_data=json.dumps({
-            "message":"Hello, I am your legal advisor agent /n please feel to ask about law",
-            "checkpoint":"beginner-1"
-        }))
+        print(LEGAL_ADVISOR_PROMPT)
+        for chunk, checkpoint, is_stop in query(app, self.room_name, LEGAL_ADVISOR_PROMPT):
+            self.send(text_data=json.dumps({"message": chunk, "checkpoint":checkpoint, "is_stop":is_stop}))
 
     def disconnect(self, close_code):
         pass

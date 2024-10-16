@@ -1,16 +1,27 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<div class="px-4 py-5 my-5 text-center">
-    <!-- <img class="d-block mx-auto mb-4" src="/docs/5.3/assets/brand/bootstrap-logo.svg" alt="" width="72" height="57"> -->
-    <h1 class="display-5 fw-bold text-body-emphasis">Legal Advisor Chat Bot</h1>
-    <div class="col-lg-6 mx-auto">
-      <p class="lead mb-4">An AI-powered legal assistant designed to simplify your legal needs. Whether you're drafting contracts, seeking advice, or understanding legal terms, this intelligent chatbot provides accurate guidance and support in real time. With a user-friendly interface, it offers quick and reliable solutions across various legal fields, helping you save time and streamline your legal processes.</p>
-      <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
-        <a href="{% url 'signup' %}" class="btn btn-primary btn-lg px-4 gap-3">Register</a>
-        <a href="{% url 'login' %}" class="btn btn-outline-secondary btn-lg px-4">Login</a>
-      </div>
-    </div>
-  </div>
+<div class="px-4 py-5 my-5 text-center ">
+	<div class="col-lg-6 mx-auto bg-white p-3  shadow-lg rounded-3">
+		<h1 class="display-5 fw-bold text-body-emphasis">Legal Advisor Chat Bot</h1>
+		<p class="lead mb-4">An AI-powered legal assistant designed to simplify your legal needs. Whether you're
+			drafting
+			contracts, seeking advice, or understanding legal terms, this intelligent chatbot provides accurate guidance
+			and
+			support in real time. With a user-friendly interface, it offers quick and reliable solutions across various
+			legal
+			fields, helping you save time and streamline your legal processes.</p>
+		<div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+			<a href="{% url 'signup' %}" class="btn btn-primary btn-lg px-4 gap-3">Register</a>
+			<a href="{% url 'login' %}" class="btn btn-outline-secondary btn-lg px-4">Login</a>
+		</div>
+	</div>
+</div>
 
+
+<style>
+	body {
+		background-image: url('/static/background.png');
+	}
+</style>
 {% endblock content %}

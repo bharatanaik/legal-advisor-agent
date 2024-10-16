@@ -30,7 +30,9 @@ ALLOWED_HOSTS = []
 
 # LLM DEFINATION
 import os
-os.environ["GOOGLE_API_KEY"] = 'AIzaSyCEC8v-Kov_Ggd9PjbSQLpBZt_viA6EIuI'
+# os.environ["GOOGLE_API_KEY"] = 'AIzaSyCEC8v-Kov_Ggd9PjbSQLpBZt_viA6EIuI'
+# os.environ["GOOGLE_API_KEY"] = 'AIzaSyAVFcKxg1kPfYBlRHhHRVQ8sXouKAh00e0'
+os.environ["GOOGLE_API_KEY"] = 'AIzaSyB1v7F8m11XAji-qQy3YQKYKpJuKBRmgEA'
 
 from main.agent import initialize_llm
 
