@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+            <div class="card shadow my-4">
+                <div class="card-body">
+                    <form method="post">
+                        <h1>Signup</h1>
+                        <hr>
+                        {% csrf_token %}
+
+                        {{ form }}
+                        <button type="submit" class="btn btn-success mt-3">Register</button>
+                        <a href="{% url 'login' %}">already an user? login here</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    input{
+        width: 100%;
+    }
+
+    form>div{
+        margin-bottom: 15px;
+    }
+</style>
+
+{% endblock content %}

@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+            <div class="card shadow">
+                <div class="card-body">
+                    <input type="text" class="form-control" id="user-prompt">
+                </div>
+                <div class="card-body">
+                    <p id="sentence"></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4"></div>
+    </div>
+</div>
+
+
+<script>
+
+    const chatSocket = new WebSocket(
+            'ws://'
+            + window.location.host
+            + '/ws/chat/'
+            + "{{user.username}}"
+            + '/'
+        );
+
+    chatSocket.onopen = () =>{
+        console.log("CONNECTED")
+    }
+
+    const promptInput = document.getElementById("user-prompt");
+
+    promptInput.addEventListener("keyup", ({key}) => {
+    if (key === "Enter") {
+            sendPrompt();
+        }
+    })
+    function sendPrompt(){
+        const message = promptInput.value;
+        chatSocket.send(JSON.stringify({message}));
+        promptInput.value = "";
+    }
+
+
+
+    chatSocket.onmessage = (e) =>{
+        const data = JSON.parse(e.data);
+        console.log(data)
+    }
+</script>
+
+{% endblock content %}
